@@ -3,7 +3,7 @@ class ArtifactsController < ApplicationController
 		this_repo_base = "#{$REPO_BASE}/#{params[:name]}"
 		if Dir.exists?(this_repo_base)
 			if params[:version].upcase == "LATEST"
-				send_file get_lastest this_repo_base
+				redirect_to "/artifacts/#{params[:name]}/#{get_lastest(this_repo_base)}"
 			else
 				send_file get_with_version this_repo_base, params[:version]
 			end
@@ -22,7 +22,7 @@ class ArtifactsController < ApplicationController
 		end
 		sorted_file_version = 
 			all_files.zip(file_versions).sort_by {|tuple1, tuple2| tuple1[1] <=> tuple2[1]}
-		sorted_file_version[-1][0]
+		sorted_file_version[-1][1]
 	end
 
 	def get_with_version this_repo_base, version
